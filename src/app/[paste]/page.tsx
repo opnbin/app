@@ -7,11 +7,7 @@ import {
   EllipsisIcon,
   Trash2Icon,
 } from "lucide-react";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import {
-  stackoverflowDark,
-  // stackoverflowLight,
-} from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Document } from "@/components/document";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,9 +20,10 @@ import { formatIso, links } from "@/utils";
 export default async function Page({ params }: { params: Promise<{ paste: string }> }) {
   const { paste: id } = await params;
 
-  const baseUrl = process.env.OPNBIN_BASE_URL;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/${id}`, {
+    method: "GET",
+  });
 
-  const response = await fetch(`${baseUrl}/${id}`, { method: "GET" });
   const data: Record<string, any> = await response.json();
 
   return (
@@ -69,17 +66,9 @@ export default async function Page({ params }: { params: Promise<{ paste: string
         <span className="text-muted-foreground text-sm">{data.description}</span>
       )}
 
-      <div className="rounded-md border bg-card flex flex-col overflow-hidden mt-4 drop-shadow-xl">
-        <SyntaxHighlighter
-          language={data.language}
-          style={stackoverflowDark}
-          customStyle={{ padding: "16px" }}
-        >
-          {data.content}
-        </SyntaxHighlighter>
-      </div>
+      <Document data={data} />
 
-      <div className="flex gap-0.5 text-muted-foreground text-xs mt-4">
+      <div className="flex gap-0.5 text-muted-foreground text-sm mt-6">
         <span>Created {formatIso(data.created_at)}</span>
 
         <DotIcon className="size-4" />

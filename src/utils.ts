@@ -1,33 +1,3 @@
-export interface Filters {
-  page?: number;
-  limit?: number;
-  search?: string;
-  language?: string;
-  createdBefore?: string;
-  createdAfter?: string;
-}
-
-export function buildUrl(baseUrl: string, filters: Filters) {
-  const url = new URL(baseUrl);
-
-  const paramMap: Record<string, string | number | undefined> = {
-    page: filters.page,
-    limit: filters.limit,
-    search: filters.search,
-    language: filters.language,
-    created_before: filters.createdBefore,
-    created_after: filters.createdAfter,
-  };
-
-  for (const [key, value] of Object.entries(paramMap)) {
-    if (value != null) {
-      url.searchParams.set(key, String(value));
-    }
-  }
-
-  return url;
-}
-
 export function formatIso(iso: string): string {
   return new Date(iso).toLocaleString("en-US", {
     year: "numeric",

@@ -17,13 +17,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export function ConnectDialog({
-  children,
-  baseUrl,
-}: {
-  children: ReactNode;
-  baseUrl: string | undefined;
-}) {
+export function ConnectDialog({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const [secret, setSecret] = useState("");
@@ -33,7 +27,7 @@ export function ConnectDialog({
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${baseUrl}/ping`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/ping`, {
         headers: {
           Authorization: `Bearer ${secret}`,
         },
@@ -59,25 +53,29 @@ export function ConnectDialog({
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Login</DialogTitle>
+          <DialogTitle>Connect</DialogTitle>
           <DialogDescription>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Enter the secret key to connect to this Opnbin instance.
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-6">
           <div className="grid gap-2.5">
-            <Label htmlFor="secret">Secret</Label>
+            <Label htmlFor="secret">
+              <span>
+                Secret <span className="text-red-500">*</span>
+              </span>
+            </Label>
             <Input
               id="secret"
-              placeholder="abc123"
+              placeholder="abcd1234"
               type="password"
               value={secret}
               onChange={(e) => setSecret(e.target.value)}
             />
-            <p className="text-muted-foreground text-xs leading-none">
-              Secret key used to authenticate requests to the API.
-            </p>
+            {/* <p className="text-muted-foreground text-xs leading-none">
+              Secret key used to authenticate requests.
+            </p> */}
           </div>
         </div>
 

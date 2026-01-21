@@ -2,14 +2,35 @@ import { DotIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import { ConnectDialog } from "@/components/connect-dialog";
 import { Pastes } from "@/components/pastes";
+import { SearchBar } from "@/components/search-bar";
 import { TopBar } from "@/components/top-bar";
 import { links } from "@/utils";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string }>;
+}) {
   const cookieStore = await cookies();
-
   const secret = cookieStore.get("opnbin_secret")?.value;
-  const loggedIn = !!secret;
+
+  let loggedIn = false;
+
+  if (secret) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/ping`, {
+        headers: {
+          Authorization: `Bearer ${secret}`,
+        },
+      });
+
+      if (response.ok) {
+        loggedIn = true;
+      }
+    } catch {
+      loggedIn = false;
+    }
+  }
 
   if (!loggedIn) {
     return (
@@ -18,7 +39,7 @@ export default async function Page() {
           <span className="text-3xl font-medium tracking-tight my-auto">A simple 🗑️ pastebin.</span>
 
           <div className="flex gap-0.5 items-center text-xs text-muted-foreground">
-            <ConnectDialog baseUrl={process.env.OPNBIN_BASE_URL}>
+            <ConnectDialog>
               <span className="hover:underline underline-offset-2">Connect</span>
             </ConnectDialog>
 
@@ -52,7 +73,8 @@ export default async function Page() {
   return (
     <div className="max-w-4xl mx-auto p-6 flex flex-col gap-4">
       <TopBar />
-      <Pastes />
+      <SearchBar />
+      <Pastes searchParams={searchParams} />
     </div>
   );
 }

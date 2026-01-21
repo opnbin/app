@@ -1,5 +1,6 @@
 "use client";
 
+import Cookies from "js-cookie";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -39,11 +40,11 @@ export function NewPasteButton() {
         body.description = trimmedDescription;
       }
 
-      const response = await fetch("http://localhost:8000/", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          Authorization: "Bearer your-secret-here",
+          Authorization: `Bearer ${Cookies.get("opnbin_secret")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
@@ -105,7 +106,7 @@ export function NewPasteButton() {
             <Label htmlFor="paste-language">Language</Label>
             <Input
               id="paste-language"
-              placeholder="txt"
+              placeholder="text"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
             />
