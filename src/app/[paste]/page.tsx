@@ -1,20 +1,7 @@
-import {
-  ArrowUpRightIcon,
-  CopyIcon,
-  DotIcon,
-  DownloadIcon,
-  EditIcon,
-  EllipsisIcon,
-  Trash2Icon,
-} from "lucide-react";
-import { Document } from "@/components/document";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ArrowUpRightIcon, DotIcon } from "lucide-react";
+import { PasteActions } from "@/components/paste-view/paste-actions";
+import { PasteManageButtons } from "@/components/paste-view/paste-manage-buttons";
+import { PasteWindow } from "@/components/paste-view/paste-window";
 import { formatIso, links } from "@/utils";
 
 export default async function Page({ params }: { params: Promise<{ paste: string }> }) {
@@ -32,33 +19,8 @@ export default async function Page({ params }: { params: Promise<{ paste: string
         <span className="text-xl font-semibold tracking-tight">{data.name}</span>
 
         <div className="flex">
-          <Button variant="ghost" size="icon">
-            <DownloadIcon />
-          </Button>
-
-          <Button variant="ghost" size="icon">
-            <CopyIcon />
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <EllipsisIcon />
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                <EditIcon />
-                Edit
-              </DropdownMenuItem>
-
-              <DropdownMenuItem variant="destructive">
-                <Trash2Icon />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <PasteActions name={data.name} content={data.content} />
+          <PasteManageButtons paste={data} />
         </div>
       </div>
 
@@ -66,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ paste: string
         <span className="text-muted-foreground text-sm">{data.description}</span>
       )}
 
-      <Document data={data} />
+      <PasteWindow data={data} />
 
       <div className="flex gap-0.5 text-muted-foreground text-sm mt-6">
         <span>Created {formatIso(data.created_at)}</span>

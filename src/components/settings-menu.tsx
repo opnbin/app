@@ -1,9 +1,17 @@
 "use client";
 
 import Cookies from "js-cookie";
-import { LogOutIcon, MonitorIcon, MoonIcon, SettingsIcon, SunIcon } from "lucide-react";
+import {
+  LogOutIcon,
+  MonitorIcon,
+  MoonIcon,
+  SettingsIcon,
+  SquareCheckBigIcon,
+  SunIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useSelectionStore } from "@/stores/selection";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -19,6 +27,7 @@ import {
 export function SettingsMenu() {
   const router = useRouter();
   const { setTheme } = useTheme();
+  const { setSelectMode } = useSelectionStore();
 
   return (
     <DropdownMenu>
@@ -52,6 +61,11 @@ export function SettingsMenu() {
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
         </DropdownMenuSub>
+
+        <DropdownMenuItem onClick={() => setSelectMode(true)}>
+          <SquareCheckBigIcon />
+          Select
+        </DropdownMenuItem>
 
         <DropdownMenuItem
           variant="destructive"

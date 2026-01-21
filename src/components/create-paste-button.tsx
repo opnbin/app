@@ -19,7 +19,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 
-export function NewPasteButton() {
+export function CreatePasteButton() {
   const router = useRouter();
 
   const [name, setName] = useState("");

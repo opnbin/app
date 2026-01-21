@@ -73,9 +73,9 @@ export function ConnectDialog({ children }: { children: ReactNode }) {
               value={secret}
               onChange={(e) => setSecret(e.target.value)}
             />
-            {/* <p className="text-muted-foreground text-xs leading-none">
+            <p className="text-muted-foreground text-xs leading-none">
               Secret key used to authenticate requests.
-            </p> */}
+            </p>
           </div>
         </div>
 

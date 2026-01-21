@@ -1,7 +1,7 @@
 import { DotIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import { ConnectDialog } from "@/components/connect-dialog";
-import { Pastes } from "@/components/pastes";
+import { PastesList } from "@/components/pastes-list";
 import { SearchBar } from "@/components/search-bar";
 import { TopBar } from "@/components/top-bar";
 import { links } from "@/utils";
@@ -14,7 +14,7 @@ export default async function Page({
   const cookieStore = await cookies();
   const secret = cookieStore.get("opnbin_secret")?.value;
 
-  let loggedIn = false;
+  let connected = false;
 
   if (secret) {
     try {
@@ -25,14 +25,14 @@ export default async function Page({
       });
 
       if (response.ok) {
-        loggedIn = true;
+        connected = true;
       }
     } catch {
-      loggedIn = false;
+      connected = false;
     }
   }
 
-  if (!loggedIn) {
+  if (!connected) {
     return (
       <div className="flex justify-center items-center p-6 h-screen">
         <div className="flex flex-col gap-8 items-center h-full">
@@ -74,7 +74,7 @@ export default async function Page({
     <div className="max-w-4xl mx-auto p-6 flex flex-col gap-4">
       <TopBar />
       <SearchBar />
-      <Pastes searchParams={searchParams} />
+      <PastesList searchParams={searchParams} />
     </div>
   );
 }

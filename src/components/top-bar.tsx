@@ -1,18 +1,20 @@
 import { Trash2Icon } from "lucide-react";
-import { NewPasteButton } from "./new-paste-button";
+import { CreatePasteButton } from "./create-paste-button";
+import { DeleteSelectedButton } from "./delete-selected-button";
 import { SettingsMenu } from "./settings-menu";
 
 export function TopBar() {
   return (
     <div className="flex gap-4 justify-between items-center">
-      <span className="text-xl font-medium tracking-tight flex gap-2 items-center">
+      <a href="/" className="text-xl font-medium tracking-tight flex gap-2 items-center">
         <Trash2Icon className="size-5" />
         opnbin
-      </span>
+      </a>
 
       <div className="flex">
+        <DeleteSelectedButton />
         <SettingsMenu />
-        <NewPasteButton />
+        <CreatePasteButton />
       </div>
     </div>
   );
