@@ -17,7 +17,7 @@ export function formatIso(iso: string): string {
 }
 
 export const links = {
-  github: "https://github.com/ronykax/openbin-core",
+  github: "https://github.com/ronykax/openbin",
   homepage: "https://openbin.ronykax.xyz",
   discord: "https://discord.gg/CU5SUGNvtH",
 };
