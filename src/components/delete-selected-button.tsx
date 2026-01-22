@@ -7,7 +7,7 @@ import { useSelectionStore } from "@/stores/selection";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-export function DeleteSelectedButton() {
+export function DeleteSelectedButton({ baseUrl }: { baseUrl: string }) {
   const router = useRouter();
   const { selectMode, selectedIds, setSelectMode, clearSelection } = useSelectionStore();
 
@@ -16,7 +16,7 @@ export function DeleteSelectedButton() {
   async function handleDelete() {
     const secret = Cookies.get("opnbin_secret");
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}`, {
+    const response = await fetch(baseUrl, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { cookies } from "next/headers";
 import { Fragment } from "react/jsx-runtime";
+import { env } from "@/lib/env";
 import { PasteItem } from "./paste-item";
 import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
@@ -11,7 +12,7 @@ export async function PastesList({
 }: {
   searchParams: Promise<{ [key: string]: string }>;
 }) {
-  const url = new URL(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}`);
+  const url = new URL(env("OPNBIN_CORE"));
   url.search = new URLSearchParams(await searchParams).toString();
 
   const cookieStore = await cookies();

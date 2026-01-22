@@ -4,7 +4,8 @@ import { ConnectDialog } from "@/components/connect-dialog";
 import { PastesList } from "@/components/pastes-list";
 import { SearchBar } from "@/components/search-bar";
 import { TopBar } from "@/components/top-bar";
-import { links } from "@/utils";
+import { env } from "@/lib/env";
+import { links } from "@/lib/utils";
 
 export default async function Page({
   searchParams,
@@ -18,7 +19,7 @@ export default async function Page({
 
   if (secret) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/ping`, {
+      const response = await fetch(`${env("OPNBIN_CORE")}/ping`, {
         headers: {
           Authorization: `Bearer ${secret}`,
         },
@@ -39,7 +40,7 @@ export default async function Page({
           <span className="text-3xl font-medium tracking-tight my-auto">A simple 🗑️ pastebin.</span>
 
           <div className="flex gap-0.5 items-center text-xs text-muted-foreground">
-            <ConnectDialog>
+            <ConnectDialog baseUrl={env("OPNBIN_CORE")}>
               <span className="hover:underline underline-offset-2">Connect</span>
             </ConnectDialog>
 

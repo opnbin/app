@@ -17,7 +17,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export function ConnectDialog({ children }: { children: ReactNode }) {
+export function ConnectDialog({ children, baseUrl }: { children: ReactNode; baseUrl: string }) {
   const router = useRouter();
 
   const [secret, setSecret] = useState("");
@@ -27,7 +27,7 @@ export function ConnectDialog({ children }: { children: ReactNode }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(new URL("/ping", process.env.NEXT_PUBLIC_OPNBIN_BASE_URL), {
+      const response = await fetch(`${baseUrl}/ping`, {
         headers: {
           Authorization: `Bearer ${secret}`,
         },
@@ -40,8 +40,8 @@ export function ConnectDialog({ children }: { children: ReactNode }) {
       } else {
         alert("Invalid credentials");
       }
-    } catch {
-      alert("Failed to connect to server");
+    } catch (error) {
+      alert(`Failed to connect to server: ${error}`);
     } finally {
       setIsLoading(false);
     }

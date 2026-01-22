@@ -2,12 +2,13 @@ import { ArrowUpRightIcon, DotIcon } from "lucide-react";
 import { PasteActions } from "@/components/paste-view/paste-actions";
 import { PasteManageButtons } from "@/components/paste-view/paste-manage-buttons";
 import { PasteWindow } from "@/components/paste-view/paste-window";
-import { formatIso, links } from "@/utils";
+import { env } from "@/lib/env";
+import { formatIso, links } from "@/lib/utils";
 
 export default async function Page({ params }: { params: Promise<{ paste: string }> }) {
   const { paste: id } = await params;
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/${id}`, {
+  const response = await fetch(`${env("OPNBIN_CORE")}/${id}`, {
     method: "GET",
   });
 
@@ -20,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ paste: string
 
         <div className="flex">
           <PasteActions name={data.name} content={data.content} />
-          <PasteManageButtons paste={data} />
+          <PasteManageButtons paste={data} baseUrl={env("OPNBIN_CORE")} />
         </div>
       </div>
 

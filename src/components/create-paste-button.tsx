@@ -19,7 +19,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 
-export function CreatePasteButton() {
+export function CreatePasteButton({ baseUrl }: { baseUrl: string }) {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -40,7 +40,7 @@ export function CreatePasteButton() {
         body.description = trimmedDescription;
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}`, {
+      const response = await fetch(baseUrl, {
         method: "POST",
         headers: {
           Accept: "application/json",

@@ -24,7 +24,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export function PasteManageButtons({ paste }: { paste: Record<string, any> }) {
+export function PasteManageButtons({
+  paste,
+  baseUrl,
+}: {
+  paste: Record<string, any>;
+  baseUrl: string;
+}) {
   const router = useRouter();
   const [connected, setConnected] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -41,7 +47,7 @@ export function PasteManageButtons({ paste }: { paste: Record<string, any> }) {
       if (!secret) return;
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/ping`, {
+        const response = await fetch(`${baseUrl}/ping`, {
           headers: {
             Authorization: `Bearer ${secret}`,
           },
@@ -56,11 +62,11 @@ export function PasteManageButtons({ paste }: { paste: Record<string, any> }) {
     }
 
     checkConnection();
-  }, []);
+  }, [baseUrl]);
 
   const handleEdit = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/${paste.id}`, {
+      const response = await fetch(`${baseUrl}/${paste.id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
@@ -89,7 +95,7 @@ export function PasteManageButtons({ paste }: { paste: Record<string, any> }) {
   const handleDelete = async () => {
     const secret = Cookies.get("opnbin_secret");
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}`, {
+    const response = await fetch(`${baseUrl}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
