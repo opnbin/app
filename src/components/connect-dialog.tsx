@@ -27,7 +27,7 @@ export function ConnectDialog({ children }: { children: ReactNode }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_OPNBIN_BASE_URL}/ping`, {
+      const response = await fetch(new URL("/ping", process.env.NEXT_PUBLIC_OPNBIN_BASE_URL), {
         headers: {
           Authorization: `Bearer ${secret}`,
         },
