@@ -1,37 +1,27 @@
 "use client";
-
-import Cookies from "js-cookie";
 import { Trash2Icon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { deletePastes } from "@/lib/actions";
 import { useSelectionStore } from "@/stores/selection";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-export function DeleteSelectedButton({ baseUrl }: { baseUrl: string }) {
+export function DeleteSelectedButton() {
   const router = useRouter();
   const { selectMode, selectedIds, setSelectMode, clearSelection } = useSelectionStore();
 
   if (!selectMode) return null;
 
   async function handleDelete() {
-    const secret = Cookies.get("openbin_secret");
+    const result = await deletePastes(selectedIds);
 
-    const response = await fetch(baseUrl, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${secret}`,
-      },
-      body: JSON.stringify({ ids: selectedIds }),
-    });
-
-    if (response.ok) {
+    if (result.success) {
       clearSelection();
       setSelectMode(false);
 
       router.refresh();
     } else {
-      alert("Failed to delete");
+      alert(result.error);
     }
   }
 

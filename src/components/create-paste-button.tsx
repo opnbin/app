@@ -1,9 +1,9 @@
 "use client";
 
-import Cookies from "js-cookie";
 import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createPaste } from "@/lib/actions";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -19,7 +19,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 
-export function CreatePasteButton({ baseUrl }: { baseUrl: string }) {
+export function CreatePasteButton() {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -28,36 +28,12 @@ export function CreatePasteButton({ baseUrl }: { baseUrl: string }) {
   const [content, setContent] = useState("");
 
   const handleConfirm = async () => {
-    try {
-      const body: Record<string, any> = {
-        name,
-        language,
-        content,
-      };
+    const result = await createPaste({ content, language, name, description });
 
-      const trimmedDescription = description.trim();
-      if (trimmedDescription) {
-        body.description = trimmedDescription;
-      }
-
-      const response = await fetch(baseUrl, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${Cookies.get("openbin_secret")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create paste");
-      }
-
-      const data = await response.json();
-      router.push(`/${data.id}`);
-    } catch (error) {
-      console.error("Error creating paste:", error);
+    if (result.success) {
+      router.push(`/${result.id}`);
+    } else {
+      alert(result.error);
     }
   };
 

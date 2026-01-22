@@ -4,7 +4,7 @@ import { ConnectDialog } from "@/components/connect-dialog";
 import { PastesList } from "@/components/pastes-list";
 import { SearchBar } from "@/components/search-bar";
 import { TopBar } from "@/components/top-bar";
-import { env } from "@/lib/env";
+import { pingApi } from "@/lib/actions";
 import { links } from "@/lib/utils";
 
 export default async function Page({
@@ -18,18 +18,10 @@ export default async function Page({
   let connected = false;
 
   if (secret) {
-    try {
-      const response = await fetch(`${env("OPENBIN_CORE")}/ping`, {
-        headers: {
-          Authorization: `Bearer ${secret}`,
-        },
-      });
+    const error = await pingApi(secret);
 
-      if (response.ok) {
-        connected = true;
-      }
-    } catch {
-      connected = false;
+    if (!error) {
+      connected = true;
     }
   }
 
@@ -40,7 +32,7 @@ export default async function Page({
           <span className="text-3xl font-medium tracking-tight my-auto">A simple 🗑️ pastebin.</span>
 
           <div className="flex gap-0.5 items-center text-xs text-muted-foreground">
-            <ConnectDialog baseUrl={env("OPENBIN_CORE")}>
+            <ConnectDialog>
               <span className="hover:underline underline-offset-2">Connect</span>
             </ConnectDialog>
 

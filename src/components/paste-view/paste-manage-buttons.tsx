@@ -23,14 +23,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { deletePastes, pingApi, updatePaste } from "@/lib/actions";
 
-export function PasteManageButtons({
-  paste,
-  baseUrl,
-}: {
-  paste: Record<string, any>;
-  baseUrl: string;
-}) {
+export function PasteManageButtons({ paste }: { paste: Record<string, any> }) {
   const router = useRouter();
   const [connected, setConnected] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -43,71 +38,42 @@ export function PasteManageButtons({
   useEffect(() => {
     async function checkConnection() {
       const secret = Cookies.get("openbin_secret");
-
       if (!secret) return;
 
-      try {
-        const response = await fetch(`${baseUrl}/ping`, {
-          headers: {
-            Authorization: `Bearer ${secret}`,
-          },
-        });
+      const error = await pingApi(secret);
 
-        if (response.ok) {
-          setConnected(true);
-        }
-      } catch {
-        setConnected(false);
+      if (!error) {
+        setConnected(true);
       }
     }
 
     checkConnection();
-  }, [baseUrl]);
+  }, []);
 
   const handleEdit = async () => {
-    try {
-      const response = await fetch(`${baseUrl}/${paste.id}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${Cookies.get("openbin_secret")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          description,
-          language,
-          content,
-        }),
-      });
+    const result = await updatePaste(paste.id, {
+      name,
+      description,
+      language,
+      content,
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to update paste");
-      }
-
+    if (result.success) {
       setEditDialogOpen(false);
       router.refresh();
-    } catch (error) {
-      console.error("Error updating paste:", error);
+    } else {
+      alert(result.error);
+      return;
     }
   };
 
   const handleDelete = async () => {
-    const secret = Cookies.get("openbin_secret");
+    const result = await deletePastes([paste.id]);
 
-    const response = await fetch(`${baseUrl}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${secret}`,
-      },
-      body: JSON.stringify({ ids: [paste.id] }),
-    });
-
-    if (response.ok) {
+    if (result.success) {
       router.push("/");
     } else {
-      alert("Failed to delete");
+      alert(result.error);
     }
   };
 

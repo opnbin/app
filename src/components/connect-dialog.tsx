@@ -3,6 +3,7 @@
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
+import { pingApi } from "@/lib/actions";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -17,34 +18,18 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export function ConnectDialog({ children, baseUrl }: { children: ReactNode; baseUrl: string }) {
+export function ConnectDialog({ children }: { children: ReactNode }) {
   const router = useRouter();
-
   const [secret, setSecret] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirm = async () => {
-    setIsLoading(true);
+    const error = await pingApi(secret);
 
-    try {
-      const response = await fetch(`${baseUrl}/ping`, {
-        headers: {
-          Authorization: `Bearer ${secret}`,
-        },
-      });
-
-      if (response.ok) {
-        Cookies.set("openbin_secret", secret, { expires: 365, sameSite: "strict" });
-
-        router.refresh();
-      } else {
-        alert("Invalid credentials");
-      }
-    } catch (error) {
-      alert(`Failed to connect to server`);
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+    if (error) {
+      alert(error);
+    } else {
+      Cookies.set("openbin_secret", secret, { expires: 365, sameSite: "strict" });
+      router.refresh();
     }
   };
 
@@ -85,9 +70,7 @@ export function ConnectDialog({ children, baseUrl }: { children: ReactNode; base
             <Button variant="outline">Cancel</Button>
           </DialogClose>
 
-          <Button onClick={handleConfirm} disabled={isLoading}>
-            {isLoading ? "Connecting..." : "Confirm"}
-          </Button>
+          <Button onClick={handleConfirm}>Confirm</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

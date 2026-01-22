@@ -1,5 +1,4 @@
 import { Trash2Icon } from "lucide-react";
-import { env } from "@/lib/env";
 import { CreatePasteButton } from "./create-paste-button";
 import { DeleteSelectedButton } from "./delete-selected-button";
 import { SettingsMenu } from "./settings-menu";
@@ -13,9 +12,9 @@ export async function TopBar() {
       </a>
 
       <div className="flex">
-        <DeleteSelectedButton baseUrl={env("OPENBIN_CORE")} />
+        <DeleteSelectedButton />
         <SettingsMenu />
-        <CreatePasteButton baseUrl={env("OPENBIN_CORE")} />
+        <CreatePasteButton />
       </div>
     </div>
   );

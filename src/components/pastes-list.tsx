@@ -1,8 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { cookies } from "next/headers";
 import { Fragment } from "react/jsx-runtime";
-import { env } from "@/lib/env";
+import { getPastes } from "@/lib/actions";
 import { PasteItem } from "./paste-item";
 import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
@@ -12,23 +11,15 @@ export async function PastesList({
 }: {
   searchParams: Promise<{ [key: string]: string }>;
 }) {
-  const url = new URL(env("OPENBIN_CORE"));
-  url.search = new URLSearchParams(await searchParams).toString();
-
-  const cookieStore = await cookies();
   let pastes: Record<string, any>[] | undefined;
+  const result = await getPastes(new URLSearchParams(await searchParams));
 
-  await fetch(url, {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization: `Bearer ${cookieStore.get("openbin_secret")?.value}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      pastes = data.pastes;
-    });
+  if (result.success) {
+    pastes = result.data.pastes;
+  } else {
+    pastes = undefined;
+    console.error(result.error);
+  }
 
   const cat = await fs.readFile(path.join(process.cwd(), "public", "cat.txt"), "utf-8");
 

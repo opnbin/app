@@ -1,9 +1,10 @@
 import { ArrowUpRightIcon, DotIcon } from "lucide-react";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { PasteActions } from "@/components/paste-view/paste-actions";
 import { PasteManageButtons } from "@/components/paste-view/paste-manage-buttons";
 import { PasteWindow } from "@/components/paste-view/paste-window";
-import { env } from "@/lib/env";
+import { getPaste } from "@/lib/actions";
 import { formatIso, links } from "@/lib/utils";
 
 export async function generateMetadata({
@@ -12,12 +13,23 @@ export async function generateMetadata({
   params: Promise<{ paste: string }>;
 }): Promise<Metadata> {
   const { paste: id } = await params;
+  const result = await getPaste(id);
 
-  const response = await fetch(`${env("OPENBIN_CORE")}/${id}`, {
-    method: "GET",
-  });
+  if (!result.success) {
+    return {
+      title: "Paste not found",
+      description: "The paste you are looking for does not exist.",
+      openGraph: {
+        title: "Paste not found",
+        description: "The paste you are looking for does not exist.",
+        url: `${process.env.OPENBIN_CORE}/${id}`,
+        siteName: "Openbin",
+        type: "website",
+      },
+    };
+  }
 
-  const data: Record<string, any> = await response.json();
+  const { data } = result;
 
   return {
     title: data.name,
@@ -25,7 +37,7 @@ export async function generateMetadata({
     openGraph: {
       title: data.name,
       description: data.description,
-      url: `${env("OPENBIN_CORE")}/${id}`,
+      url: `${process.env.OPENBIN_CORE}/${data.id}`,
       siteName: "Openbin",
       type: "website",
     },
@@ -34,12 +46,13 @@ export async function generateMetadata({
 
 export default async function Page({ params }: { params: Promise<{ paste: string }> }) {
   const { paste: id } = await params;
+  const result = await getPaste(id);
 
-  const response = await fetch(`${env("OPENBIN_CORE")}/${id}`, {
-    method: "GET",
-  });
+  if (!result.success) {
+    redirect("/");
+  }
 
-  const data: Record<string, any> = await response.json();
+  const { data } = result;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -48,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ paste: string
 
         <div className="flex">
           <PasteActions name={data.name} content={data.content} />
-          <PasteManageButtons paste={data} baseUrl={env("OPENBIN_CORE")} />
+          <PasteManageButtons paste={data} />
         </div>
       </div>
 
