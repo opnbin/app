@@ -9,13 +9,13 @@ export async function TopBar() {
     <div className="flex gap-4 justify-between items-center">
       <a href="/" className="text-xl font-medium tracking-tight flex gap-2 items-center">
         <Trash2Icon className="size-5" />
-        opnbin
+        Openbin
       </a>
 
       <div className="flex">
-        <DeleteSelectedButton baseUrl={env("OPNBIN_CORE")} />
+        <DeleteSelectedButton baseUrl={env("OPENBIN_CORE")} />
         <SettingsMenu />
-        <CreatePasteButton baseUrl={env("OPNBIN_CORE")} />
+        <CreatePasteButton baseUrl={env("OPENBIN_CORE")} />
       </div>
     </div>
   );

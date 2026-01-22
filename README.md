@@ -1,1 +1,1 @@
-# Opnbin Web UI
+# Openbin app

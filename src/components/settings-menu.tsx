@@ -70,7 +70,7 @@ export function SettingsMenu() {
         <DropdownMenuItem
           variant="destructive"
           onClick={() => {
-            Cookies.remove("opnbin_secret");
+            Cookies.remove("openbin_secret");
             router.refresh();
           }}
         >

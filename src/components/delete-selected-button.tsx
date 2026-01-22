@@ -14,7 +14,7 @@ export function DeleteSelectedButton({ baseUrl }: { baseUrl: string }) {
   if (!selectMode) return null;
 
   async function handleDelete() {
-    const secret = Cookies.get("opnbin_secret");
+    const secret = Cookies.get("openbin_secret");
 
     const response = await fetch(baseUrl, {
       method: "DELETE",

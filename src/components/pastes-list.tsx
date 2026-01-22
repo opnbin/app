@@ -12,7 +12,7 @@ export async function PastesList({
 }: {
   searchParams: Promise<{ [key: string]: string }>;
 }) {
-  const url = new URL(env("OPNBIN_CORE"));
+  const url = new URL(env("OPENBIN_CORE"));
   url.search = new URLSearchParams(await searchParams).toString();
 
   const cookieStore = await cookies();
@@ -22,7 +22,7 @@ export async function PastesList({
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization: `Bearer ${cookieStore.get("opnbin_secret")?.value}`,
+      Authorization: `Bearer ${cookieStore.get("openbin_secret")?.value}`,
     },
   })
     .then((res) => res.json())

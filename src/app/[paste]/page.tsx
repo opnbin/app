@@ -13,7 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { paste: id } = await params;
 
-  const response = await fetch(`${env("OPNBIN_CORE")}/${id}`, {
+  const response = await fetch(`${env("OPENBIN_CORE")}/${id}`, {
     method: "GET",
   });
 
@@ -25,8 +25,8 @@ export async function generateMetadata({
     openGraph: {
       title: data.name,
       description: data.description,
-      url: `${env("OPNBIN_CORE")}/${id}`,
-      siteName: "opnbin",
+      url: `${env("OPENBIN_CORE")}/${id}`,
+      siteName: "Openbin",
       type: "website",
     },
   };
@@ -35,7 +35,7 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: Promise<{ paste: string }> }) {
   const { paste: id } = await params;
 
-  const response = await fetch(`${env("OPNBIN_CORE")}/${id}`, {
+  const response = await fetch(`${env("OPENBIN_CORE")}/${id}`, {
     method: "GET",
   });
 
@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ paste: string
 
         <div className="flex">
           <PasteActions name={data.name} content={data.content} />
-          <PasteManageButtons paste={data} baseUrl={env("OPNBIN_CORE")} />
+          <PasteManageButtons paste={data} baseUrl={env("OPENBIN_CORE")} />
         </div>
       </div>
 
@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ paste: string
         <DotIcon className="size-4" />
 
         <a href={links.homepage} target="_blank" className="flex gap-1 items-center" rel="noopener">
-          <span>Powered by Opnbin</span>
+          <span>Powered by Openbin</span>
           <ArrowUpRightIcon className="size-3" />
         </a>
       </div>

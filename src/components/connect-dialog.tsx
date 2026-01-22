@@ -34,14 +34,15 @@ export function ConnectDialog({ children, baseUrl }: { children: ReactNode; base
       });
 
       if (response.ok) {
-        Cookies.set("opnbin_secret", secret, { expires: 365, sameSite: "strict" });
+        Cookies.set("openbin_secret", secret, { expires: 365, sameSite: "strict" });
 
         router.refresh();
       } else {
         alert("Invalid credentials");
       }
     } catch (error) {
-      alert(`Failed to connect to server: ${error}`);
+      alert(`Failed to connect to server`);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +56,7 @@ export function ConnectDialog({ children, baseUrl }: { children: ReactNode; base
         <DialogHeader>
           <DialogTitle>Connect</DialogTitle>
           <DialogDescription>
-            Enter the secret key to connect to this Opnbin instance.
+            Enter the secret key to connect to this Openbin instance.
           </DialogDescription>
         </DialogHeader>
 

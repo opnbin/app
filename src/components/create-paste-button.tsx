@@ -44,7 +44,7 @@ export function CreatePasteButton({ baseUrl }: { baseUrl: string }) {
         method: "POST",
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${Cookies.get("opnbin_secret")}`,
+          Authorization: `Bearer ${Cookies.get("openbin_secret")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),

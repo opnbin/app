@@ -13,13 +13,13 @@ export default async function Page({
   searchParams: Promise<{ [key: string]: string }>;
 }) {
   const cookieStore = await cookies();
-  const secret = cookieStore.get("opnbin_secret")?.value;
+  const secret = cookieStore.get("openbin_secret")?.value;
 
   let connected = false;
 
   if (secret) {
     try {
-      const response = await fetch(`${env("OPNBIN_CORE")}/ping`, {
+      const response = await fetch(`${env("OPENBIN_CORE")}/ping`, {
         headers: {
           Authorization: `Bearer ${secret}`,
         },
@@ -40,7 +40,7 @@ export default async function Page({
           <span className="text-3xl font-medium tracking-tight my-auto">A simple 🗑️ pastebin.</span>
 
           <div className="flex gap-0.5 items-center text-xs text-muted-foreground">
-            <ConnectDialog baseUrl={env("OPNBIN_CORE")}>
+            <ConnectDialog baseUrl={env("OPENBIN_CORE")}>
               <span className="hover:underline underline-offset-2">Connect</span>
             </ConnectDialog>
 

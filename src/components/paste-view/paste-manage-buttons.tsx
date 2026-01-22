@@ -42,7 +42,7 @@ export function PasteManageButtons({
 
   useEffect(() => {
     async function checkConnection() {
-      const secret = Cookies.get("opnbin_secret");
+      const secret = Cookies.get("openbin_secret");
 
       if (!secret) return;
 
@@ -70,7 +70,7 @@ export function PasteManageButtons({
         method: "PUT",
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${Cookies.get("opnbin_secret")}`,
+          Authorization: `Bearer ${Cookies.get("openbin_secret")}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -93,7 +93,7 @@ export function PasteManageButtons({
   };
 
   const handleDelete = async () => {
-    const secret = Cookies.get("opnbin_secret");
+    const secret = Cookies.get("openbin_secret");
 
     const response = await fetch(`${baseUrl}`, {
       method: "DELETE",
