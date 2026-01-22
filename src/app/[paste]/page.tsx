@@ -1,9 +1,36 @@
 import { ArrowUpRightIcon, DotIcon } from "lucide-react";
+import type { Metadata } from "next";
 import { PasteActions } from "@/components/paste-view/paste-actions";
 import { PasteManageButtons } from "@/components/paste-view/paste-manage-buttons";
 import { PasteWindow } from "@/components/paste-view/paste-window";
 import { env } from "@/lib/env";
 import { formatIso, links } from "@/lib/utils";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ paste: string }>;
+}): Promise<Metadata> {
+  const { paste: id } = await params;
+
+  const response = await fetch(`${env("OPNBIN_CORE")}/${id}`, {
+    method: "GET",
+  });
+
+  const data: Record<string, any> = await response.json();
+
+  return {
+    title: data.name,
+    description: data.description,
+    openGraph: {
+      title: data.name,
+      description: data.description,
+      url: `${env("OPNBIN_CORE")}/${id}`,
+      siteName: "opnbin",
+      type: "website",
+    },
+  };
+}
 
 export default async function Page({ params }: { params: Promise<{ paste: string }> }) {
   const { paste: id } = await params;
